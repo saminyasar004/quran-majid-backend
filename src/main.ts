@@ -18,14 +18,16 @@ async function bootstrap() {
 
   // Swagger Configuration
   const config = new DocumentBuilder()
-    .setTitle('Nurul Ayah API')
-    .setDescription('The Holy Quran API with Search and Surah listing functionality')
+    .setTitle('Quran Majid API')
+    .setDescription(
+      'The Holy Quran API with Search and Surah listing functionality',
+    )
     .setVersion('1.0')
     .addTag('quran', 'Quranic operations')
     .addTag('search', 'Search across verses')
     .addTag('audio', 'Audio related operations')
     .build();
-  
+
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 
