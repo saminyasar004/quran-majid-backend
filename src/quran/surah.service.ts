@@ -26,16 +26,22 @@ export class SurahService {
     }
 
     if (includeAudio) {
-      const audioData = await this.audioService.getSurahAudio(number);
-      const audioMap = new Map(audioData.map((a) => [a.number, a.audio]));
-      
-      return {
-        ...surah,
-        ayahs: surah.ayahs.map((ayah) => ({
-          ...ayah,
-          audioUrl: (audioMap.get(ayah.number) as string) || null,
-        })),
-      };
+      try {
+        const audioData = await this.audioService.getSurahAudio(number);
+        const audioMap = new Map(audioData.map((a) => [a.number, a.audio]));
+        
+        return {
+          ...surah,
+          ayahs: surah.ayahs.map((ayah) => ({
+            ...ayah,
+            audioUrl: (audioMap.get(ayah.number) as string) || null,
+          })),
+        };
+      } catch (error) {
+        console.error(`Error fetching audio for surah ${number}:`, error);
+        // Fallback to surah without audio instead of 500
+        return surah;
+      }
     }
 
     return surah;

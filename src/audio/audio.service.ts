@@ -17,13 +17,21 @@ export class AudioService {
   async getSurahAudio(surahNumber: number, reciter = 'ar.alafasy'): Promise<any[]> {
     try {
       const response = await axios.get(`${this.baseUrl}/surah/${surahNumber}/${reciter}`);
-      return response.data.data.ayahs.map((ayah: any) => ({
+      const ayahs = response.data?.data?.ayahs;
+      
+      if (!ayahs || !Array.isArray(ayahs)) {
+        console.warn(`No ayahs found in audio response for surah ${surahNumber}`);
+        return [];
+      }
+
+      return ayahs.map((ayah: any) => ({
         number: ayah.number,
         audio: ayah.audio,
         audioSecondary: ayah.audioSecondary,
       }));
     } catch (error) {
-      throw new Error(`Failed to fetch audio for surah ${surahNumber}: ${error.message}`);
+      console.error(`Failed to fetch audio for surah ${surahNumber}:`, error.message);
+      return []; // Return empty array instead of throwing
     }
   }
 
@@ -71,9 +79,10 @@ export class AudioService {
   async getReciters(): Promise<any[]> {
     try {
       const response = await axios.get(`${this.baseUrl}/edition/type/versebyverse`);
-      return response.data.data;
+      return response.data?.data || [];
     } catch (error) {
-      throw new Error(`Failed to fetch reciters: ${error.message}`);
+      console.error(`Failed to fetch reciters:`, error.message);
+      return [];
     }
   }
 }
