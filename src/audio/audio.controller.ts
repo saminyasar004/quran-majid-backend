@@ -67,4 +67,11 @@ export class AudioController {
   async getFormats() {
     return this.audioService.getFormats();
   }
+
+  @Get('reciters')
+  @ApiOperation({ summary: 'List all verse-by-verse reciters', description: 'Returns a list of all available reciters on alquran.cloud.' })
+  @ApiResponse({ status: 200, description: 'Return the list of reciters.' })
+  async getReciters() {
+    return this.audioService.getReciters();
+  }
 }

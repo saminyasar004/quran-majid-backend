@@ -67,4 +67,13 @@ export class AudioService {
       throw new Error(`Failed to fetch edition formats: ${error.message}`);
     }
   }
+
+  async getReciters(): Promise<any[]> {
+    try {
+      const response = await axios.get(`${this.baseUrl}/edition/type/versebyverse`);
+      return response.data.data;
+    } catch (error) {
+      throw new Error(`Failed to fetch reciters: ${error.message}`);
+    }
+  }
 }
